@@ -4,6 +4,10 @@ OrgDirectory (.NET 8, ASP.NET Core MVC) — Docker Compose
 
 Запуск:
     docker compose up -d --build
+Обязательно(слетел db init,надо бд создать):
+    docker exec -it orgdirectory-monorepo-db-1 psql -U auth -d maindb -v ON_ERROR_STOP=1 -c "CREATE DATABASE authdb OWNER auth;"
+    docker exec -it orgdirectory-monorepo-db-1 psql -U auth -d authdb -v ON_ERROR_STOP=1 -f /docker-entrypoint-initdb.d/10-init-authdb.sql
+
 
 
 В корне лежат: docker-compose.yml, Dockerfile, .env.
