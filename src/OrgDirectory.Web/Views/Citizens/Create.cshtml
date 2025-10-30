@@ -1,0 +1,51 @@
+@model OrgDirectory.Web.Models.Citizen
+@{
+    if (Context.Request.Headers["X-Partial"] == "true") { Layout = null; }
+}
+<h3>Добавить гражданина</h3>
+<form method="post">
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Фамилия</label>
+      <input asp-for="LastName" class="form-control"/>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Имя</label>
+      <input asp-for="FirstName" class="form-control"/>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Отчество</label>
+      <input asp-for="MiddleName" class="form-control"/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3 mb-3">
+      <label class="form-label">Год рождения</label>
+      <input asp-for="BirthYear" class="form-control"/>
+    </div>
+    <div class="col-md-3 mb-3">
+      <label class="form-label">Пол</label>
+      <select asp-for="Gender" class="form-select">
+        <option value="">—</option>
+        <option value="M">М</option>
+        <option value="F">Ж</option>
+      </select>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Адрес регистрации</label>
+      <input asp-for="RegistrationAddress" class="form-control"/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">ИНН</label>
+      <input asp-for="Inn" class="form-control"/>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">СНИЛС</label>
+      <input asp-for="Snils" class="form-control"/>
+    </div>
+  </div>
+  <button class="btn btn-primary">Сохранить</button>
+  <a class="btn btn-secondary" href="/Citizens">Отмена</a>
+</form>

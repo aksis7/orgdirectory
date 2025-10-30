@@ -1,0 +1,10 @@
+bin/
+obj/
+*.user
+*.vscode
+*.suo
+*.swp
+*.csproj.user
+*/node_modules
+*/dist
+*/.DS_Store

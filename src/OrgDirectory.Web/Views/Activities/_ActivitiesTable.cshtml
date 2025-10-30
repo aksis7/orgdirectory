@@ -1,0 +1,39 @@
+@model IEnumerable<OrgDirectory.Web.Models.Activity>
+
+@{
+  var sortDir   = (ViewBag.SortDir   as string ?? "asc").ToLower();
+  var sortField = (ViewBag.SortField as string ?? "").ToLower();
+}
+<div class="table-wrap" data-entity="activities" data-current-field="@sortField" data-current-dir="@sortDir">
+  <div class="table-responsive">
+    <table class="table table-striped table-sm align-middle">
+      <thead>
+        <tr>
+          <th style="width:56px;">#</th>
+          <th>
+            <a href="#" data-sort-act="name" class="text-decoration-none">
+              Наименование @(sortField=="name" ? (sortDir=="asc"?"▲":"▼") : "")
+            </a>
+          </th>
+          
+        </tr>
+      </thead>
+      <tbody>
+      @foreach (var row in Model.Select((x,i)=> new { Item = x, Index = i }))
+      {
+        <tr>
+          <td>@(row.Index + 1)</td>
+          <td>@row.Item.Name</td>
+          <td class="text-end">
+            <a class="btn btn-sm btn-outline-secondary me-1" href="/Activities/Edit/@row.Item.Id" data-nav>Изменить</a>
+            <form method="post" action="/Activities/Delete/@row.Item.Id" class="d-inline" data-del-act>
+              @Html.AntiForgeryToken()
+              <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Удалить?');">Удалить</button>
+            </form>
+          </td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  </div>
+</div>

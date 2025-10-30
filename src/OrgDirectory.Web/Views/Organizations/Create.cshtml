@@ -1,0 +1,47 @@
+@model OrgDirectory.Web.Models.Organization
+@{
+    if (Context.Request.Headers["X-Partial"] == "true") { Layout = null; }
+}
+<h3>Добавить организацию</h3>
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Полное наименование</label>
+    <input asp-for="FullName" class="form-control"/>
+    <span asp-validation-for="FullName" class="text-danger"></span>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Краткое наименование</label>
+    <input asp-for="ShortName" class="form-control"/>
+  </div>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Сфера деятельности</label>
+      <select asp-for="ActivityId" class="form-select" asp-items="ViewBag.ActivityId"></select>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Директор</label>
+      <select asp-for="DirectorId" class="form-select" asp-items="ViewBag.DirectorId"></select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Уставной капитал</label>
+      <input asp-for="CharterCapital" class="form-control"/>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">ИНН</label>
+      <input asp-for="Inn" class="form-control"/>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">КПП</label>
+      <input asp-for="Kpp" class="form-control"/>
+    </div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">ОГРН</label>
+    <input asp-for="Ogrn" class="form-control"/>
+  </div>
+  <button class="btn btn-primary">Сохранить</button>
+  <a class="btn btn-secondary" href="/Organizations">Отмена</a>
+</form>
+@section Scripts{ <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,90 @@
+/* общие переменные и фон */
+:root { --auth-blur: 10px; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+
+.auth-shell{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  font-family:'Lato', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  /* главное изменение: фон читается из --auth-bg, есть fallback на относительный путь */
+  background: var(--auth-bg, url("../img/3a3d46.png")) center/cover no-repeat fixed;
+  position:relative;
+  padding:32px 16px;
+}
+
+/* стеклянная карточка */
+.auth-card{
+  position:relative;
+  width:clamp(280px, 40vw, 420px);
+  padding:24px 20px 28px;
+  border-radius:14px;
+  background:rgba(255,255,255,0.18);
+  backdrop-filter: blur(var(--auth-blur));
+  -webkit-backdrop-filter: blur(var(--auth-blur));
+  box-shadow:0 10px 28px rgba(0,0,0,.35);
+}
+.auth-card::before{
+  content:"";
+  position:absolute; inset:0;
+  background: var(--auth-bg, url("../img/3a3d46.png")) center/cover no-repeat;
+  filter:blur(100px); z-index:-1;
+}
+
+/* заголовок */
+.auth-title{ color:#fdfdfd; font-weight:600; }
+
+/* поля внутри стекла — pill/белые */
+.auth-card .form-control{
+  background:#fff;
+  border:1px solid #e5e5e4;
+  color:#2b2b2b;
+  box-shadow:0 1px 0 rgba(0,0,0,.03) inset;
+  height:48px;
+  padding:8px 18px;
+}
+.auth-card .form-control::placeholder{ color:#8a97a0; }
+
+/* кнопки */
+.auth-card .auth-btn{
+  border:1px solid #d1d1d1;
+  box-shadow:0 0 10px rgba(0,0,0,.1);
+}
+.auth-card .auth-btn:hover{ background:#f7f7f7; }
+
+/* ссылка "Показать" */
+.toggle-pass{ color:#6c757d; text-decoration:none; }
+.toggle-pass:hover{ text-decoration:underline; }
+
+/* ошибки/summary */
+.auth-card .invalid-feedback.d-block{ color:#ffb3b3; }
+.auth-summary{ display:none; margin-bottom:12px; padding:8px 12px; }
+.validation-summary-errors.auth-summary{ display:block; }
+
+/* ссылки под формой */
+.label1{ color:#8a97a0; text-decoration:none; }
+.label1:hover{ text-decoration:underline; }
+
+/* фоновые «плитки» */
+.square{
+  position:absolute;
+  width:110px; height:110px;
+  background:rgba(255,255,255,0.18);
+  backdrop-filter: blur(var(--auth-blur));
+  border-radius:12px;
+  box-shadow:0 0 10px rgba(0,0,0,.35);
+  z-index:0;
+}
+.square::before{
+  content:""; position:absolute; inset:0;
+  background: var(--auth-bg, url("../img/3a3d46.png")) center/cover no-repeat;
+  filter:blur(100px);
+}
+.sq1{ top:6%; left:18%; }
+.sq2{ top:24%; right:14%; }
+.sq3{ bottom:18%; left:10%; }
+.sq4{ bottom:8%; right:28%; }
+
+@media (max-width:768px){ .square{ opacity:.6; transform:scale(.9); } }
+@media (max-width:480px){ .square{ display:none; } }

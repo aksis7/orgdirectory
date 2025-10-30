@@ -1,0 +1,52 @@
+@model IEnumerable<OrgDirectory.Web.Models.Citizen>
+
+@{
+  var sortDir   = (ViewBag.SortDir   as string ?? "asc").ToLower();
+  var sortField = (ViewBag.SortField as string ?? "").ToLower();
+}
+
+<div class="table-wrap" data-entity="citizens" data-current-field="@sortField" data-current-dir="@sortDir">
+  <div class="table-responsive">
+    <table class="table table-striped table-sm align-middle">
+      <thead>
+        <tr>
+          <th>
+            <a href="#" data-sort-cit="lastname"  class="text-decoration-none">
+              Фамилия @(sortField=="lastname"  ? (sortDir=="asc"?"▲":"▼") : "")
+            </a>
+          </th>
+          <th>
+            <a href="#" data-sort-cit="firstname" class="text-decoration-none">
+              Имя @(sortField=="firstname" ? (sortDir=="asc"?"▲":"▼") : "")
+            </a>
+          </th>
+          <th>
+            <a href="#" data-sort-cit="birthyear" class="text-decoration-none">
+              Год @(sortField=="birthyear" ? (sortDir=="asc"?"▲":"▼") : "")
+            </a>
+          </th>
+          
+        </tr>
+      </thead>
+      <tbody>
+      @foreach (var c in Model)
+      {
+        <tr>
+          <td>@c.LastName</td>
+          <td>@c.FirstName</td>
+          <td>@c.BirthYear</td>
+          <td>
+            <div class="actions">
+              <a class="btn btn-sm btn-outline-secondary" href="/Citizens/Edit/@c.Id" data-nav>Изменить</a>
+              <form method="post" action="/Citizens/Delete/@c.Id" data-del-cit>
+                @Html.AntiForgeryToken()
+                <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Удалить?');">Удалить</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  </div>
+</div>

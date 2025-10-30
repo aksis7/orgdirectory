@@ -1,0 +1,10 @@
+body { padding-bottom: 40px; }
+table th a { color: inherit; }
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: nowrap;
+}
+.actions form { margin: 0; }

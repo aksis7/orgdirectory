@@ -1,0 +1,18 @@
+@model IEnumerable<OrgDirectory.Web.Models.Citizen>
+@{
+    if (Context.Request.Headers["X-Partial"] == "true") { Layout = null; }
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>Граждане</h3>
+  <div>
+    <a class="btn btn-outline-secondary me-2" href="/Citizens/Export?fmt=csv">CSV</a>
+    <a class="btn btn-outline-secondary me-2" href="/Citizens/Export?fmt=json">JSON</a>
+    <a class="btn btn-outline-secondary me-3" href="/Citizens/Export?fmt=xml">XML</a>
+    <a class="btn btn-primary" href="/Citizens/Create" data-nav>Добавить</a>
+  </div>
+</div>
+
+<div id="citizens-container">
+  @await Html.PartialAsync("_CitizensTable", Model)
+</div>

@@ -1,0 +1,19 @@
+@model IEnumerable<OrgDirectory.Web.Models.Activity>
+@{
+    if (Context.Request.Headers["X-Partial"] == "true") { Layout = null; }
+}
+
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>Сферы деятельности</h3>
+  <div>
+    <a class="btn btn-outline-secondary me-2" href="/Activities/Export?fmt=csv">CSV</a>
+    <a class="btn btn-outline-secondary me-2" href="/Activities/Export?fmt=json">JSON</a>
+    <a class="btn btn-outline-secondary me-3" href="/Activities/Export?fmt=xml">XML</a>
+    <a class="btn btn-primary" href="/Activities/Create" data-nav>Добавить</a>
+  </div>
+</div>
+
+<div id="activities-container">
+  @await Html.PartialAsync("_ActivitiesTable", Model)
+</div>

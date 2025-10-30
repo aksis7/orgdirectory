@@ -1,0 +1,16 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS dev
+WORKDIR /app
+
+# копируем только проект для кеша зависимостей
+COPY OrgDirectory.Web.csproj ./
+RUN dotnet restore
+
+# копируем исходники
+COPY . .
+
+# ✅ устанавливаем среду разработки
+ENV ASPNETCORE_ENVIRONMENT=Development
+EXPOSE 8080
+
+# ✅ включаем Razor runtime compilation и hot reload
+ENTRYPOINT ["dotnet", "watch", "run", "--urls", "http://0.0.0.0:8080"]

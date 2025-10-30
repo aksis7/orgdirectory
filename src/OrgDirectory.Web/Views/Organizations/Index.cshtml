@@ -1,0 +1,48 @@
+@model List<OrgDirectory.Web.Models.Organization>
+@{
+    if (Context.Request.Headers["X-Partial"] == "true") { Layout = null; }
+}
+
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>Организации</h3>
+  <div>
+    <a class="btn btn-outline-secondary me-2" href="/Organizations/Export?fmt=csv">CSV</a>
+    <a class="btn btn-outline-secondary me-2" href="/Organizations/Export?fmt=json">JSON</a>
+    <a class="btn btn-outline-secondary me-3" href="/Organizations/Export?fmt=xml">XML</a>
+    <a class="btn btn-primary" href="/Organizations/Create" data-nav>Добавить</a>
+  </div>
+</div>
+
+
+<div id="orgs-container">
+    @await Html.PartialAsync("_OrganizationsTable", Model)
+</div>
+
+@section Scripts {
+<script>
+function initOrgTable() {
+    document.querySelectorAll("[data-sort]").forEach(a => {
+        a.onclick = e => {
+            e.preventDefault();
+            reloadOrgs(a.dataset.sort);
+        };
+    });
+}
+
+async function reloadOrgs(sortField) {
+    const container = document.getElementById("orgs-container");
+    container.style.opacity = "0.5";
+    const resp = await fetch(`/Organizations?sortField=${sortField}`, {
+        headers: { "X-Partial": "true" }
+    });
+    const html = await resp.text();
+    container.innerHTML = html;
+    container.style.opacity = "1";
+    initOrgTable(); // перевешиваем сортировку
+}
+
+// первая инициализация
+initOrgTable();
+</script>
+}

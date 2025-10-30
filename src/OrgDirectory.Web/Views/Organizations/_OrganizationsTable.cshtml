@@ -1,0 +1,69 @@
+@model System.Collections.Generic.IEnumerable<OrgDirectory.Web.Models.Organization>
+
+@{
+    var sortDir   = (ViewBag.SortDir as string ?? "asc").ToLower();
+    var sortField = (ViewBag.SortField as string ?? "").ToLower();
+}
+<div class="table-wrap" data-entity="orgs" data-current-field="@sortField" data-current-dir="@sortDir">
+  <div class="table-responsive">
+    <table class="table table-striped table-sm align-middle">
+      <thead>
+        <tr>
+          <th style="width:56px;">#</th>
+          <th>
+            <a href="#" data-sort-org="fullname" class="text-decoration-none">
+              Полное наименование @(sortField=="fullname" ? (sortDir=="asc"?"▲":"▼") : "")
+            </a>
+          </th>
+          <th>
+            <a href="#" data-sort-org="shortname" class="text-decoration-none">
+              Краткое @(sortField=="shortname" ? (sortDir=="asc"?"▲":"▼") : "")
+            </a>
+          </th>
+          <th>
+            <a href="#" data-sort-org="director" class="text-decoration-none">
+              Директор @(sortField=="director" ? (sortDir=="asc"?"▲":"▼") : "")
+            </a>
+          </th>
+          <th>
+            <a href="#" data-sort-org="capital" class="text-decoration-none">
+              Уставной капитал @(sortField=="capital" ? (sortDir=="asc"?"▲":"▼") : "")
+            </a>
+          </th>
+          <th><a href="#" data-sort-org="inn"  class="text-decoration-none">ИНН  @(sortField=="inn"  ? (sortDir=="asc"?"▲":"▼") : "")</a></th>
+          <th><a href="#" data-sort-org="kpp"  class="text-decoration-none">КПП  @(sortField=="kpp"  ? (sortDir=="asc"?"▲":"▼") : "")</a></th>
+          <th><a href="#" data-sort-org="ogrn" class="text-decoration-none">ОГРН @(sortField=="ogrn" ? (sortDir=="asc"?"▲":"▼") : "")</a></th>
+          
+        </tr>
+      </thead>
+      <tbody>
+      @if (Model != null)
+      {
+          var i = 0;
+          foreach (var o in Model)
+          {
+              <tr>
+                  <td>@(++i)</td>
+                  <td>@o.FullName</td>
+                  <td>@o.ShortName</td>
+                  <td>@o.Director?.FullName</td>
+                  <td>@o.CharterCapital.ToString("N2")</td>
+                  <td>@o.Inn</td>
+                  <td>@o.Kpp</td>
+                  <td>@o.Ogrn</td>
+                  <td>
+                    <div class="actions">
+                      <a class="btn btn-sm btn-outline-secondary" href="/Organizations/Edit/@o.Id" data-nav>Изменить</a>
+                      <form method="post" action="/Organizations/Delete/@o.Id" data-del-org>
+                        @Html.AntiForgeryToken()
+                        <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Удалить?');">Удалить</button>
+                      </form>
+                    </div>
+                  </td>
+              </tr>
+          }
+      }
+      </tbody>
+    </table>
+  </div>
+</div>

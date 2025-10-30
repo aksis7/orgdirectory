@@ -1,0 +1,15 @@
+@{
+    if (Context.Request.Headers["X-Partial"] == "true") { Layout = null; }
+}
+@{
+    ViewData["Title"] = "Главная";
+    
+}
+
+<div class="p-5 mb-4 bg-light rounded-3">
+  <div class="container-fluid py-5">
+    <h1 class="display-6">Справочник организаций</h1>
+    <p class="col-md-8 fs-5">Демо-приложение на ASP.NET MVC + EF Core + PostgreSQL</p>
+    <a class="btn btn-primary btn-lg" href="/Organizations">Перейти к организациям</a>
+  </div>
+</div>
