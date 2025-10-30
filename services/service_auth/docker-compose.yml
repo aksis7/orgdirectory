@@ -1,0 +1,89 @@
+version: "3.8"
+
+services:
+  # Kafka в режиме KRaft (контроллер+брокер, node.id = 1)
+  kafka:
+    image: bitnami/kafka:3.7
+    restart: unless-stopped
+    environment:
+      # включаем KRaft:
+      KAFKA_ENABLE_KRAFT: "yes"
+
+      # уникальный, неизменяемый идентификатор кластера
+      KAFKA_KRAFT_CLUSTER_ID: "c0ffee-babe-42af-a111-ffeeddccbbaa"
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+      # конфигурация узла
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_CFG_PROCESS_ROLES: "controller,broker"
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_LISTENERS: >-
+        PLAINTEXT://:9092,
+        CONTROLLER://:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
+
+      # разрешаем открытый PLAINTEXT-листенер для dev-окружения
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+    ports:
+      - "9092:9092"   # брокер (для сервиса авторизации)
+    volumes:
+      - kafka_data:/bitnami/kafka
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-broker-api-versions.sh --bootstrap-server kafka:9092"]
+      interval: 20s
+      timeout: 10s
+      retries: 6
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8081:80"
+    depends_on:
+      - postgres
+
+  # PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: auth
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: authdb
+    ports:
+      - "5442:5432"     #
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auth"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Auth-сервис 
+  auth-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      AUTH_SECRET: supersecretkey
+      AUTH_ISSUER: auth_service
+      DB_DSN: postgres://auth:secret@postgres:5432/authdb?sslmode=disable
+      KAFKA_BROKERS: kafka:9092
+      KAFKA_TOPIC: auth.events
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  kafka_data:

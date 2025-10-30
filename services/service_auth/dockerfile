@@ -1,0 +1,15 @@
+# этап сборки
+FROM golang:1.24-alpine AS builder
+WORKDIR /app
+COPY . .
+RUN go mod download
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o auth-server ./cmd/auth-server
+
+# минимальный ран-тайм
+FROM alpine:3.19
+RUN adduser -D -g '' appuser
+WORKDIR /app
+COPY --from=builder /app/auth-server .
+EXPOSE 8080
+USER appuser
+CMD ["./auth-server"]
