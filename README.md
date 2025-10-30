@@ -4,7 +4,9 @@ OrgDirectory (.NET 8, ASP.NET Core MVC) — Docker Compose
 
 Запуск:
     docker compose up -d --build
-    В корне лежат: docker-compose.yml, Dockerfile, .env.
+
+
+В корне лежат: docker-compose.yml, Dockerfile, .env.
 
 
 Вход:
